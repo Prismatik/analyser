@@ -1,36 +1,31 @@
-getUserMedia = navigator.getUserMedia or navigator.webkitGetUserMedia or navigator.mozGetUserMedia or navigator.msGetUserMedia
 
 getAverageVolume = (array) ->
-  values = 0
-  average = undefined
-  length = array.length
-  
-  # get all the frequency amplitudes
-  i = 0
+  total = 0
+  for value in array
+    total += value
 
-  while i < length
-    values += array[i]
-    i++
-  average = values / length
+  average = total / length
   return average
 
-module.exports = (opts = {}, cb) ->
+window.Analyser = (opts, cb) ->
+  if typeof opts is 'function'
+    cb = opts
+    opts = {}
   audioCtx = new (window.AudioContext or window.webkitAudioContext)()
   analyser = audioCtx.createAnalyser()
-  success = (stream) ->
+  window.success = success = (stream) ->
     analyser.fftsize = opts.fftsize or 5
     analyser.smoothingTimeConstant = opts.smoothingTimeConstant or 0
     source = audioCtx.createMediaStreamSource stream
     source.connect analyser
 
-    return cb null, ->
-      dataArray = new Uint8Array(anallyser.frequencyBinCount)
-      analyser.getByteFrequencyData(dataArray)
-      return getAverageVolume(dataArray)
+    return cb null,
+      getVolume: ->
+        dataArray = new Uint8Array(analyser.frequencyBinCount)
+        analyser.getByteFrequencyData(dataArray)
+        return getAverageVolume(dataArray)
 
-  failure = (err) ->
+  window.failure = failure = (err) ->
     return cb err
 
-  return getUserMedia {
-    audio: true
-  }, success, failure
+  navigator.webkitGetUserMedia { audio: true }, success, failure
