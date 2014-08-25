@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="./analyser.js"></script>
+<script>
+  Analyser(function(err, actions) {
+      if(err) alert(err);
+      setInterval(function() {
+        var volume = actions.getVolume();
+        console.log(volume);
+        document.getElementById('loudness').innerText = volume;
+      }, 500);
+  });
+</script>
+</head>
+<body>
+It is this loud: <span id="loudness"></span>
+</body>
+</html>
