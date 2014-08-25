@@ -1,0 +1,16 @@
+{
+  "name": "analyser",
+  "version": "0.0.0",
+  "description": "How loud is it?",
+  "main": "analyser.js",
+  "scripts": {
+    "test": "echo 'compile the code with gulp, start a local webserver in this dir, then load index.html. Testing browser code is awful and I am sad now.'"
+  },
+  "author": "david@banham.id.au",
+  "license": "Proprietary",
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "gulp-coffee": "~2.1.2",
+    "coffee-script": "~1.7.1"
+  }
+}
